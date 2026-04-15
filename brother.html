@@ -1370,9 +1370,95 @@ function escHtml(str) {
 }
 
 // ============================================================
+// ============================================================
+// TURBO GATE — must earn access through the game
+// ============================================================
+function getTurboStars() {
+  let total = 0;
+  ['es','fr','de'].forEach(lang => {
+    ['identity','family','likes','school','hobbies','opinions'].forEach(cat => {
+      for (let lv = 1; lv <= 5; lv++) {
+        const b = localStorage.getItem(`turbo_best_${lang}_${cat}_${lv}`);
+        if (b) total += parseInt(b);
+      }
+    });
+  });
+  return total;
+}
+
+function checkTurboGate() {
+  const stars = getTurboStars();
+  const THRESHOLD = 30;
+  if (stars >= THRESHOLD) return; // all good
+
+  // Not enough stars — show locked screen
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const locked = document.getElementById('screen-locked');
+  if (locked) { locked.classList.add('active'); return; }
+
+  // Build the locked screen dynamically
+  const div = document.createElement('div');
+  div.id = 'screen-locked';
+  div.style.cssText = 'display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;background:#1c1917;padding:30px;text-align:center;';
+  div.innerHTML = `
+    <svg viewBox="0 0 200 260" width="130" height="169" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="190" rx="58" ry="72" fill="#2d5a27"/>
+      <rect x="42" y="155" width="116" height="100" rx="20" fill="#2d5a27"/>
+      <rect x="84" y="155" width="32" height="90" rx="4" fill="#f0ead6"/>
+      <path d="M42 165 Q55 155 72 152 L84 155 L84 245 Q62 240 42 220Z" fill="#3d7a35"/>
+      <path d="M158 165 Q145 155 128 152 L116 155 L116 245 Q138 240 158 220Z" fill="#3d7a35"/>
+      <ellipse cx="28" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="172" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="28" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <ellipse cx="172" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <rect x="86" y="128" width="28" height="32" rx="8" fill="#d4956a"/>
+      <ellipse cx="100" cy="100" rx="54" ry="60" fill="#d4956a"/>
+      <ellipse cx="100" cy="52" rx="52" ry="28" fill="#e8e2d0"/>
+      <path d="M48 72 Q44 55 50 42 Q58 28 72 24 Q86 20 100 20 Q114 20 128 24 Q142 28 150 42 Q156 55 152 72" fill="#e8e2d0"/>
+      <path d="M48 85 Q42 95 44 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <path d="M152 85 Q158 95 156 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="100" cy="80" rx="44" ry="22" fill="#d4956a"/>
+      <path d="M68 90 Q82 84 96 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <path d="M104 90 Q118 84 132 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="82" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="118" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="82" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="118" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="82" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="118" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="84" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="120" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="82" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="118" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M97 103 Q100 100 103 103" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M67 99 Q60 96 54 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M133 99 Q140 96 146 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="100" cy="118" rx="9" ry="7" fill="#c08060"/>
+      <path d="M84 130 Q100 138 116 130" fill="none" stroke="#8a5a3a" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="46" cy="105" rx="9" ry="13" fill="#c08060"/>
+      <ellipse cx="154" cy="105" rx="9" ry="13" fill="#c08060"/>
+    </svg>
+    <h2 style="font-family:'Lora',serif;color:white;font-size:1.8rem;margin:20px 0 10px;">Not yet.</h2>
+    <p style="color:rgba(255,255,255,0.5);font-size:1rem;max-width:320px;line-height:1.7;margin-bottom:8px;">
+      You have <strong style="color:#ffd93d;">${stars} star${stars !== 1 ? 's' : ''}</strong> from Turbo.<br>
+      You need <strong style="color:white;">${THRESHOLD}</strong> to earn The Brother.
+    </p>
+    <p style="color:rgba(255,255,255,0.35);font-size:0.85rem;font-style:italic;margin-bottom:32px;">
+      "Go back and do the work first."
+    </p>
+    <a href="index.html" style="background:#2d5a27;color:white;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;padding:14px 32px;border-radius:12px;text-decoration:none;transition:all 0.2s;">
+      ← Back to Turbo
+    </a>
+  `;
+  document.body.appendChild(div);
+}
+
+// ============================================================
 // INIT — restore saved state
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
+  checkTurboGate();
+
   const savedName = localStorage.getItem('brother_name');
   const savedLang = localStorage.getItem('brother_lang');
   const savedWeek = localStorage.getItem('brother_week');
