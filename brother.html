@@ -1377,7 +1377,7 @@ function getTurboStars() {
   let total = 0;
   ['es','fr','de'].forEach(lang => {
     ['identity','family','likes','school','hobbies','opinions'].forEach(cat => {
-      for (let lv = 1; lv <= 5; lv++) {
+      for (let lv = 1; lv <= 10; lv++) {
         const b = localStorage.getItem(`turbo_best_${lang}_${cat}_${lv}`);
         if (b) total += parseInt(b);
       }
