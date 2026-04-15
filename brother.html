@@ -11,8 +11,8 @@
       --ink: #1c1917;
       --paper: #faf7f2;
       --aged: #f0ead6;
-      --ghost-purple: #6d28d9;
-      --ghost-light: #ede9fe;
+      --brother: #1a5c38;
+      --brother-light: #e8f5ee;
       --gold: #b45309;
       --teal: #0f766e;
       --coral: #be123c;
@@ -48,8 +48,8 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at 30% 40%, rgba(109,40,217,0.25) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 80%, rgba(109,40,217,0.1) 0%, transparent 50%);
+      background: radial-gradient(ellipse at 30% 40%, rgba(26,92,56,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 80%, rgba(26,92,56,0.1) 0%, transparent 50%);
     }
     .welcome-inner {
       position: relative;
@@ -59,14 +59,14 @@
       text-align: center;
     }
 
-    .ghost-figure {
+    .brother-figure {
       font-size: 6rem;
       margin-bottom: 16px;
-      animation: ghostHover 3s ease-in-out infinite;
+      animation: brotherBob 4s ease-in-out infinite;
       display: block;
-      filter: drop-shadow(0 0 30px rgba(109,40,217,0.6));
+      filter: drop-shadow(0 0 20px rgba(26,92,56,0.4));
     }
-    @keyframes ghostHover {
+    @keyframes brotherBob {
       0%,100% { transform: translateY(0) rotate(-2deg); }
       50% { transform: translateY(-12px) rotate(2deg); }
     }
@@ -119,7 +119,7 @@
       transition: border-color 0.2s;
       margin-bottom: 18px;
     }
-    .field-input:focus { border-color: var(--ghost-purple); }
+    .field-input:focus { border-color: var(--brother); }
     .field-input::placeholder { color: rgba(255,255,255,0.2); }
 
     .lang-row {
@@ -144,14 +144,14 @@
       align-items: center;
       gap: 4px;
     }
-    .lang-choice:hover { border-color: rgba(109,40,217,0.5); color: white; }
-    .lang-choice.selected { background: var(--ghost-purple); border-color: var(--ghost-purple); color: white; }
+    .lang-choice:hover { border-color: rgba(26,92,56,0.5); color: white; }
+    .lang-choice.selected { background: var(--brother); border-color: var(--brother); color: white; }
     .lang-choice .flag { font-size: 1.4rem; }
 
     .enter-btn {
       width: 100%;
       padding: 16px;
-      background: var(--ghost-purple);
+      background: var(--brother);
       color: white;
       font-family: 'Nunito', sans-serif;
       font-size: 1.1rem;
@@ -184,8 +184,8 @@
       transition: all 0.2s;
       text-align: center;
     }
-    .week-btn:hover { border-color: rgba(109,40,217,0.5); color: white; }
-    .week-btn.selected { background: var(--ghost-purple); border-color: var(--ghost-purple); color: white; }
+    .week-btn:hover { border-color: rgba(26,92,56,0.5); color: white; }
+    .week-btn.selected { background: var(--brother); border-color: var(--brother); color: white; }
 
     .turbo-note {
       color: rgba(255,255,255,0.3);
@@ -208,11 +208,11 @@
       width: 100%;
       text-align: center;
     }
-    .reveal-ghost {
+    .brother-big {
       font-size: 8rem;
       display: block;
       animation: revealFloat 2s ease-in-out infinite;
-      filter: drop-shadow(0 0 40px rgba(109,40,217,0.8));
+      filter: drop-shadow(0 0 40px rgba(26,92,56,0.8));
       margin-bottom: 20px;
     }
     @keyframes revealFloat {
@@ -233,7 +233,7 @@
       line-height: 1.6;
     }
     .reveal-btn {
-      background: var(--ghost-purple);
+      background: var(--brother);
       color: white;
       font-family: 'Nunito', sans-serif;
       font-weight: 900;
@@ -269,7 +269,7 @@
       z-index: 100;
       flex-shrink: 0;
     }
-    .chat-header-ghost { font-size: 1.8rem; animation: ghostHover 3s ease-in-out infinite; }
+    .chat-header-brother { font-size: 1.8rem; animation: brotherBob 4s ease-in-out infinite; }
     .chat-header-info { flex: 1; }
     .chat-header-name {
       font-family: 'Lora', serif;
@@ -314,7 +314,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .week-pip.active { color: white; background: rgba(109,40,217,0.4); }
+    .week-pip.active { color: white; background: rgba(26,92,56,0.4); }
     .week-pip:hover { color: rgba(255,255,255,0.6); }
 
     /* Messages */
@@ -351,7 +351,7 @@
       flex-shrink: 0;
       margin-top: 2px;
     }
-    .msg.brother .msg-avatar { background: var(--ghost-purple); }
+    .msg.brother .msg-avatar { background: var(--brother); }
     .msg.user .msg-avatar { background: var(--aged); border: 2px solid var(--border); }
 
     .msg-bubble {
@@ -368,21 +368,21 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .msg.user .msg-bubble {
-      background: var(--ghost-purple);
+      background: var(--brother);
       color: white;
       border-top-right-radius: 4px;
     }
 
     /* Fact card inside message */
     .fact-card {
-      background: var(--ghost-light);
-      border-left: 3px solid var(--ghost-purple);
+      background: var(--brother-light);
+      border-left: 3px solid var(--brother);
       border-radius: 8px;
       padding: 10px 14px;
       margin-top: 10px;
       font-size: 0.88rem;
     }
-    .fact-tl { color: var(--ghost-purple); font-weight: 700; margin-top: 4px; font-style: italic; }
+    .fact-tl { color: var(--brother); font-weight: 700; margin-top: 4px; font-style: italic; }
 
     /* Quote card */
     .quote-card {
@@ -448,11 +448,11 @@
       transition: border-color 0.2s;
       color: var(--ink);
     }
-    .chat-input:focus { border-color: var(--ghost-purple); }
+    .chat-input:focus { border-color: var(--brother); }
     .chat-input::placeholder { color: var(--muted); }
 
     .send-btn {
-      background: var(--ghost-purple);
+      background: var(--brother);
       color: white;
       border: none;
       border-radius: 12px;
@@ -483,7 +483,7 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .voice-btn:hover { border-color: var(--ghost-purple); }
+    .voice-btn:hover { border-color: var(--brother); }
     .voice-btn.listening { background: var(--coral); border-color: var(--coral); color: white; animation: pulse 1s infinite; }
     @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
@@ -494,8 +494,8 @@
       margin-top: 8px;
     }
     .hint-chip {
-      background: var(--ghost-light);
-      color: var(--ghost-purple);
+      background: var(--brother-light);
+      color: var(--brother);
       font-size: 0.75rem;
       font-weight: 700;
       padding: 4px 10px;
@@ -504,7 +504,7 @@
       border: none;
       transition: all 0.2s;
     }
-    .hint-chip:hover { background: var(--ghost-purple); color: white; }
+    .hint-chip:hover { background: var(--brother); color: white; }
 
     /* ============================================================
        SCRIPT SCREEN
@@ -545,7 +545,7 @@
     }
     .script-section-heading {
       font-weight: 900;
-      color: var(--ghost-purple);
+      color: var(--brother);
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -568,8 +568,8 @@
       margin-top: 8px;
     }
     .script-tip {
-      background: var(--ghost-light);
-      color: var(--ghost-purple);
+      background: var(--brother-light);
+      color: var(--brother);
       font-size: 0.8rem;
       padding: 6px 10px;
       border-radius: 8px;
@@ -601,7 +601,7 @@
       margin: 8px 0;
       transition: all 0.2s;
     }
-    .print-btn:hover { background: var(--ghost-purple); }
+    .print-btn:hover { background: var(--brother); }
 
     .back-to-chat {
       width: 100%;
@@ -625,8 +625,8 @@
     .spinner {
       display: inline-block;
       width: 18px; height: 18px;
-      border: 2px solid rgba(109,40,217,0.2);
-      border-top-color: var(--ghost-purple);
+      border: 2px solid rgba(26,92,56,0.2);
+      border-top-color: var(--brother);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       vertical-align: middle;
@@ -661,9 +661,9 @@
 ============================================================ -->
 <div id="screen-welcome" class="screen active">
   <div class="welcome-inner">
-    <span class="ghost-figure">👻</span>
+    <svg class="brother-figure" viewBox="0 0 120 160" width="120" height="160" xmlns="http://www.w3.org/2000/svg"><circle cx="60" cy="38" r="28" fill="#f5d0a9" stroke="#d4956a" stroke-width="2"/><ellipse cx="60" cy="36" rx="22" ry="18" fill="#e8e0d0"/><path d="M38 30 Q40 10 60 12 Q80 10 82 30 Q75 18 60 20 Q45 18 38 30Z" fill="#8B7355"/><circle cx="50" cy="38" r="3" fill="#5a3e28"/><circle cx="70" cy="38" r="3" fill="#5a3e28"/><path d="M50 50 Q60 56 70 50" stroke="#c0876a" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M44 34 Q50 32 52 36" stroke="#8B7355" stroke-width="1" fill="none"/><path d="M68 36 Q70 32 76 34" stroke="#8B7355" stroke-width="1" fill="none"/><ellipse cx="60" cy="105" rx="32" ry="38" fill="#2d5a27"/><path d="M28 100 Q32 90 40 88 L60 85 L80 88 Q88 90 92 100" fill="#2d5a27"/><rect x="36" y="62" width="48" height="30" rx="8" fill="#2d5a27"/><ellipse cx="42" cy="100" rx="14" ry="36" fill="#f5d0a9" stroke="#d4956a" stroke-width="1"/><ellipse cx="78" cy="100" rx="14" ry="36" fill="#f5d0a9" stroke="#d4956a" stroke-width="1"/><path d="M35 30 Q30 35 32 42 Q34 36 38 34" fill="#f5d0a9"/><path d="M85 30 Q90 35 88 42 Q86 36 82 34" fill="#f5d0a9"/><path d="M38 28 Q36 20 42 16" stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M82 28 Q84 20 78 16" stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M44 26 Q52 22 60 23 Q68 22 76 26" stroke="#c8c0b0" stroke-width="1.5" fill="none"/></svg>
     <h1 class="welcome-title">The Brother</h1>
-    <p class="welcome-sub">Your CBA guide. Your script. Your call.</p>
+    <p class="welcome-sub">Your mentor. Your script. Your presentation.</p>
 
     <div class="welcome-card">
       <label class="field-label">Your first name</label>
@@ -703,9 +703,9 @@
 ============================================================ -->
 <div id="screen-reveal" class="screen">
   <div class="reveal-inner">
-    <span class="reveal-ghost">👻</span>
+    <svg class="brother-big" viewBox="0 0 120 160" width="150" height="200" xmlns="http://www.w3.org/2000/svg"><circle cx="60" cy="38" r="28" fill="#f5d0a9" stroke="#d4956a" stroke-width="2"/><ellipse cx="60" cy="36" rx="22" ry="18" fill="#e8e0d0"/><path d="M38 30 Q40 10 60 12 Q80 10 82 30 Q75 18 60 20 Q45 18 38 30Z" fill="#8B7355"/><circle cx="50" cy="38" r="3" fill="#5a3e28"/><circle cx="70" cy="38" r="3" fill="#5a3e28"/><path d="M50 50 Q60 56 70 50" stroke="#c0876a" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M44 34 Q50 32 52 36" stroke="#8B7355" stroke-width="1" fill="none"/><path d="M68 36 Q70 32 76 34" stroke="#8B7355" stroke-width="1" fill="none"/><ellipse cx="60" cy="105" rx="32" ry="38" fill="#2d5a27"/><path d="M28 100 Q32 90 40 88 L60 85 L80 88 Q88 90 92 100" fill="#2d5a27"/><rect x="36" y="62" width="48" height="30" rx="8" fill="#2d5a27"/><ellipse cx="42" cy="100" rx="14" ry="36" fill="#f5d0a9" stroke="#d4956a" stroke-width="1"/><ellipse cx="78" cy="100" rx="14" ry="36" fill="#f5d0a9" stroke="#d4956a" stroke-width="1"/><path d="M35 30 Q30 35 32 42 Q34 36 38 34" fill="#f5d0a9"/><path d="M85 30 Q90 35 88 42 Q86 36 82 34" fill="#f5d0a9"/><path d="M38 28 Q36 20 42 16" stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M82 28 Q84 20 78 16" stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M44 26 Q52 22 60 23 Q68 22 76 26" stroke="#c8c0b0" stroke-width="1.5" fill="none"/></svg>
     <p class="reveal-text" id="reveal-text">Ah. There you are.</p>
-    <p class="reveal-sub" id="reveal-sub">I've been watching you play that game.<br>Good. You're ready. Let's build something.</p>
+    <p class="reveal-sub" id="reveal-sub">Good work on Turbo. Now let's build something real.<br>Good. You're ready. Let's build something.</p>
     <button class="reveal-btn" onclick="goToChat()">Let's go →</button>
   </div>
 </div>
@@ -715,7 +715,7 @@
 ============================================================ -->
 <div id="screen-chat" class="screen">
   <div class="chat-header">
-    <span class="chat-header-ghost">👻</span>
+    <span class="chat-header-brother">🧓</span>
     <div class="chat-header-info">
       <div class="chat-header-name">The Brother</div>
       <div class="chat-header-week" id="header-week-label">Week 1 · Spanish</div>
@@ -768,7 +768,7 @@
 // ============================================================
 // CONFIG — set your Worker URL here
 // ============================================================
-const WORKER_URL = 'https://YOUR_WORKER_URL.workers.dev';
+const WORKER_URL = 'https://patient-morning-62fc.seansynge.workers.dev';
 
 // ============================================================
 // STATE
@@ -862,7 +862,7 @@ function showReveal() {
     revealSub.textContent = `Good. Week 2. Time to take what you have\nand make it into something real.`;
   } else {
     revealText.textContent = `Ah. There you are, ${name}.`;
-    revealSub.textContent = `I've been watching you play that game.\nGood. You're ready. Let's build something.`;
+    revealSub.textContent = `Good work on Turbo. Now let's build something real.\nGood. You're ready. Let's build something.`;
   }
 
   showScreen('screen-reveal');
@@ -934,7 +934,7 @@ function renderMessage(role, content, animate) {
 
   const avatar = document.createElement('div');
   avatar.className = 'msg-avatar';
-  avatar.textContent = role === 'brother' ? '👻' : '🧑';
+  avatar.textContent = role === 'brother' ? '🧓' : '🧑';
 
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
@@ -956,7 +956,7 @@ function showTyping() {
 
   const avatar = document.createElement('div');
   avatar.className = 'msg-avatar';
-  avatar.textContent = '👻';
+  avatar.textContent = '🧓';
 
   const bubble = document.createElement('div');
   bubble.className = 'typing-indicator';
@@ -1166,9 +1166,9 @@ function renderScript(script) {
 
   if (script.encouragement) {
     html += `
-      <div class="script-footer" style="border-color:var(--ghost-purple); background:var(--ghost-light);">
-        <h4 style="color:var(--ghost-purple);">The Brother says</h4>
-        <p style="color:var(--ghost-purple);">${escHtml(script.encouragement)}</p>
+      <div class="script-footer" style="border-color:var(--brother); background:var(--brother-light);">
+        <h4 style="color:var(--brother);">The Brother says</h4>
+        <p style="color:var(--brother);">${escHtml(script.encouragement)}</p>
       </div>
     `;
   }
