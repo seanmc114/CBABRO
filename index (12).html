@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TURBO</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; background-color: #1a1a2e; }
+    .container { text-align: center; width: 100%; max-width: 600px; padding: 30px; background-color: rgba(255,255,255,0.95); border-radius: 20px; margin: 20px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); color: #333; }
+    h1 { font-size: 4rem; color: #FF6F61; margin-bottom: 10px; font-style: italic; }
+
+    /* Progress bar */
+    .progress-wrap { margin-bottom: 20px; }
+    .progress-label { font-size: 0.85rem; color: #666; margin-bottom: 5px; display: flex; justify-content: space-between; }
+    .progress-track { background: #eee; border-radius: 50px; height: 10px; }
+    .progress-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, #4D96FF, #6BCB77); transition: width 0.4s; }
+
+    /* Language buttons */
+    #lang-buttons { margin-bottom: 16px; }
+    .lang-btn { background: #ddd; color: #333; font-size: 1rem; padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; margin: 4px; transition: all 0.2s; }
+    .lang-btn:hover { background: #bbb; }
+    .lang-btn.active { background: #FFD93D; color: #333; font-weight: bold; }
+
+    /* Category buttons */
+    #cat-buttons { margin-bottom: 20px; }
+    .cat-btn { background: #eee; color: #555; font-size: 0.85rem; padding: 7px 14px; border: none; border-radius: 20px; cursor: pointer; margin: 3px; transition: all 0.2s; }
+    .cat-btn:hover { background: #ccc; }
+    .cat-btn.active { background: #6BCB77; color: white; font-weight: bold; }
+
+    /* Level list */
+    #level-list { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+    #level-list button { font-size: 1.1rem; padding: 14px; background-color: #2ecc71; color: white; border-radius: 10px; border: none; cursor: pointer; width: 90%; max-width: 300px; transition: transform 0.2s, background-color 0.2s; }
+    #level-list button:hover { background-color: #27ae60; transform: scale(1.05); }
+    #level-list button:disabled { background-color: #e74c3c; cursor: not-allowed; transform: none; }
+    .brother-btn { background: linear-gradient(135deg, #2d5a27, #3d7a35) !important; font-size: 1.05rem !important; }
+    .brother-btn:hover { filter: brightness(1.1); }
+
+    /* Game */
+    #game { display: none; margin-top: 16px; }
+    #timer { font-size: 1.4rem; color: #2980b9; margin-bottom: 16px; font-weight: bold; }
+
+    /* Questions — each on its own line like original */
+    #questions div { margin: 10px 0; font-size: 1.1rem; text-align: left; }
+    #questions input { font-size: 1.1rem; padding: 7px 10px; width: 100%; margin-top: 4px; border: 2px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+
+    #submit { font-size: 1.4rem; padding: 14px 28px; background-color: #f39c12; color: white; border-radius: 12px; cursor: pointer; margin: 14px 4px 4px; transition: transform 0.2s, background-color 0.2s; border: none; }
+    #submit:hover { background-color: #e67e22; transform: scale(1.05); }
+
+    #results { margin-top: 16px; font-size: 1.1rem; text-align: left; }
+    .try-again, #back-button { font-size: 1.2rem; padding: 12px 24px; background-color: #f39c12; color: white; border-radius: 10px; cursor: pointer; margin: 8px 4px; border: none; transition: transform 0.2s; }
+    .try-again:hover, #back-button:hover { background-color: #e67e22; transform: scale(1.05); }
+    .perfect-celebration { font-size: 2rem; color: gold; margin-bottom: 14px; }
+    .unlock-msg { color: #2d5a27; font-weight: bold; font-size: 1.1rem; margin: 8px 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>TURBO</h1>
+  <p style="color:#666;font-size:0.85rem;margin-bottom:16px;">EARN YOUR PHRASES · UNLOCK THE BROTHER</p>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress to The Brother</span><span id="progress-pct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Language -->
+  <div id="lang-buttons">
+    <button class="lang-btn active" onclick="selectLang('es',this)">🇪🇸 Spanish</button>
+    <button class="lang-btn" onclick="selectLang('fr',this)">🇫🇷 French</button>
+    <button class="lang-btn" onclick="selectLang('de',this)">🇩🇪 German</button>
+  </div>
+
+  <!-- Category -->
+  <div id="cat-buttons">
+    <button class="cat-btn active" onclick="selectCat('identity',this)">👤 Who I Am</button>
+    <button class="cat-btn" onclick="selectCat('family',this)">👨‍👩‍👧 Family</button>
+    <button class="cat-btn" onclick="selectCat('likes',this)">❤️ Likes</button>
+    <button class="cat-btn" onclick="selectCat('school',this)">🎒 School</button>
+    <button class="cat-btn" onclick="selectCat('hobbies',this)">⚽ Hobbies</button>
+    <button class="cat-btn" onclick="selectCat('opinions',this)">💭 Opinions</button>
+  </div>
+
+  <!-- Level list -->
+  <div id="level-list"></div>
+
+  <!-- Game -->
+  <div id="game">
+    <div id="timer">Time: 0s</div>
+    <div id="questions"></div>
+    <button id="submit">Check Answers</button>
+    <div id="results"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// PHRASE DATA
+// ============================================================
+const PHRASES = {
+  es: {
+    identity: [
+      {en:"My name is...",tl:"Me llamo..."},
+      {en:"I am ... years old",tl:"Tengo ... años"},
+      {en:"I am Irish",tl:"Soy irlandés"},
+      {en:"I am from...",tl:"Soy de..."},
+      {en:"I live in...",tl:"Vivo en..."},
+      {en:"I was born in...",tl:"Nací en..."},
+      {en:"I am tall",tl:"Soy alto"},
+      {en:"I have brown hair",tl:"Tengo el pelo moreno"},
+      {en:"I have blue eyes",tl:"Tengo los ojos azules"},
+      {en:"I am quite shy",tl:"Soy bastante tímido"},
+    ],
+    family: [
+      {en:"I have a big family",tl:"Tengo una familia grande"},
+      {en:"I have a brother",tl:"Tengo un hermano"},
+      {en:"I have a sister",tl:"Tengo una hermana"},
+      {en:"I am an only child",tl:"Soy hijo único"},
+      {en:"My mother works as...",tl:"Mi madre trabaja como..."},
+      {en:"My father is...",tl:"Mi padre es..."},
+      {en:"I get on well with my family",tl:"Me llevo bien con mi familia"},
+      {en:"My best friend is called...",tl:"Mi mejor amigo se llama..."},
+      {en:"We live in a house",tl:"Vivimos en una casa"},
+      {en:"I have a dog",tl:"Tengo un perro"},
+    ],
+    likes: [
+      {en:"I love music",tl:"Me encanta la música"},
+      {en:"I like sport",tl:"Me gusta el deporte"},
+      {en:"I don't like vegetables",tl:"No me gustan las verduras"},
+      {en:"My favourite subject is...",tl:"Mi asignatura favorita es..."},
+      {en:"I hate getting up early",tl:"Odio levantarme temprano"},
+      {en:"I prefer...",tl:"Prefiero..."},
+      {en:"I am mad about football",tl:"Estoy loco por el fútbol"},
+      {en:"I love going out with friends",tl:"Me encanta salir con amigos"},
+      {en:"I find it boring",tl:"Me parece aburrido"},
+      {en:"It is really interesting",tl:"Es muy interesante"},
+    ],
+    school: [
+      {en:"I go to school in...",tl:"Voy al instituto en..."},
+      {en:"My school is quite big",tl:"Mi instituto es bastante grande"},
+      {en:"I study ten subjects",tl:"Estudio diez asignaturas"},
+      {en:"School starts at nine",tl:"El instituto empieza a las nueve"},
+      {en:"I find maths difficult",tl:"Encuentro las matemáticas difíciles"},
+      {en:"I am good at languages",tl:"Se me dan bien los idiomas"},
+      {en:"I wear a uniform",tl:"Llevo uniforme"},
+      {en:"I travel to school by bus",tl:"Voy al instituto en autobús"},
+      {en:"I eat lunch in the canteen",tl:"Como en la cantina"},
+      {en:"My favourite teacher is...",tl:"Mi profesor favorito es..."},
+    ],
+    hobbies: [
+      {en:"In my free time I...",tl:"En mi tiempo libre..."},
+      {en:"At the weekend I...",tl:"El fin de semana..."},
+      {en:"I play football",tl:"Juego al fútbol"},
+      {en:"I listen to music",tl:"Escucho música"},
+      {en:"I watch television",tl:"Veo la televisión"},
+      {en:"I go to the gym",tl:"Voy al gimnasio"},
+      {en:"I read a lot",tl:"Leo mucho"},
+      {en:"I play video games",tl:"Juego a los videojuegos"},
+      {en:"I go out with friends",tl:"Salgo con amigos"},
+      {en:"I go swimming",tl:"Voy a nadar"},
+    ],
+    opinions: [
+      {en:"I think that...",tl:"Creo que..."},
+      {en:"In my opinion...",tl:"En mi opinión..."},
+      {en:"I believe that...",tl:"Pienso que..."},
+      {en:"It is important to...",tl:"Es importante..."},
+      {en:"The best thing is...",tl:"Lo mejor es..."},
+      {en:"The worst thing is...",tl:"Lo peor es..."},
+      {en:"I would like to...",tl:"Me gustaría..."},
+      {en:"In the future I want to...",tl:"En el futuro quiero..."},
+      {en:"I am proud of...",tl:"Estoy orgulloso de..."},
+      {en:"It seems to me that...",tl:"Me parece que..."},
+    ],
+  },
+  fr: {
+    identity: [
+      {en:"My name is...",tl:"Je m'appelle..."},
+      {en:"I am ... years old",tl:"J'ai ... ans"},
+      {en:"I am Irish",tl:"Je suis irlandais"},
+      {en:"I am from...",tl:"Je viens de..."},
+      {en:"I live in...",tl:"J'habite à..."},
+      {en:"I was born in...",tl:"Je suis né à..."},
+      {en:"I am tall",tl:"Je suis grand"},
+      {en:"I have brown hair",tl:"J'ai les cheveux bruns"},
+      {en:"I have blue eyes",tl:"J'ai les yeux bleus"},
+      {en:"I am quite shy",tl:"Je suis assez timide"},
+    ],
+    family: [
+      {en:"I have a big family",tl:"J'ai une grande famille"},
+      {en:"I have a brother",tl:"J'ai un frère"},
+      {en:"I have a sister",tl:"J'ai une sœur"},
+      {en:"I am an only child",tl:"Je suis enfant unique"},
+      {en:"My mother works as...",tl:"Ma mère travaille comme..."},
+      {en:"My father is...",tl:"Mon père est..."},
+      {en:"I get on well with my family",tl:"Je m'entends bien avec ma famille"},
+      {en:"My best friend is called...",tl:"Mon meilleur ami s'appelle..."},
+      {en:"We live in a house",tl:"Nous habitons dans une maison"},
+      {en:"I have a dog",tl:"J'ai un chien"},
+    ],
+    likes: [
+      {en:"I love music",tl:"J'adore la musique"},
+      {en:"I like sport",tl:"J'aime le sport"},
+      {en:"I don't like vegetables",tl:"Je n'aime pas les légumes"},
+      {en:"My favourite subject is...",tl:"Ma matière préférée est..."},
+      {en:"I hate getting up early",tl:"Je déteste me lever tôt"},
+      {en:"I prefer...",tl:"Je préfère..."},
+      {en:"I am mad about football",tl:"Je suis fou de football"},
+      {en:"I love going out with friends",tl:"J'adore sortir avec des amis"},
+      {en:"I find it boring",tl:"Je trouve ça ennuyeux"},
+      {en:"It is really interesting",tl:"C'est vraiment intéressant"},
+    ],
+    school: [
+      {en:"I go to school in...",tl:"Je vais au collège à..."},
+      {en:"My school is quite big",tl:"Mon école est assez grande"},
+      {en:"I study ten subjects",tl:"J'étudie dix matières"},
+      {en:"School starts at nine",tl:"L'école commence à neuf heures"},
+      {en:"I find maths difficult",tl:"Je trouve les maths difficiles"},
+      {en:"I am good at languages",tl:"Je suis doué en langues"},
+      {en:"I wear a uniform",tl:"Je porte un uniforme"},
+      {en:"I travel to school by bus",tl:"Je vais à l'école en bus"},
+      {en:"I eat lunch in the canteen",tl:"Je mange à la cantine"},
+      {en:"My favourite teacher is...",tl:"Mon professeur préféré est..."},
+    ],
+    hobbies: [
+      {en:"In my free time I...",tl:"Dans mon temps libre..."},
+      {en:"At the weekend I...",tl:"Le week-end..."},
+      {en:"I play football",tl:"Je joue au football"},
+      {en:"I listen to music",tl:"J'écoute de la musique"},
+      {en:"I watch television",tl:"Je regarde la télévision"},
+      {en:"I go to the gym",tl:"Je vais à la salle de sport"},
+      {en:"I read a lot",tl:"Je lis beaucoup"},
+      {en:"I play video games",tl:"Je joue aux jeux vidéo"},
+      {en:"I go out with friends",tl:"Je sors avec des amis"},
+      {en:"I go swimming",tl:"Je vais nager"},
+    ],
+    opinions: [
+      {en:"I think that...",tl:"Je pense que..."},
+      {en:"In my opinion...",tl:"À mon avis..."},
+      {en:"I believe that...",tl:"Je crois que..."},
+      {en:"It is important to...",tl:"Il est important de..."},
+      {en:"The best thing is...",tl:"Le mieux c'est..."},
+      {en:"The worst thing is...",tl:"Le pire c'est..."},
+      {en:"I would like to...",tl:"Je voudrais..."},
+      {en:"In the future I want to...",tl:"À l'avenir je veux..."},
+      {en:"I am proud of...",tl:"Je suis fier de..."},
+      {en:"It seems to me that...",tl:"Il me semble que..."},
+    ],
+  },
+  de: {
+    identity: [
+      {en:"My name is...",tl:"Ich heiße..."},
+      {en:"I am ... years old",tl:"Ich bin ... Jahre alt"},
+      {en:"I am Irish",tl:"Ich bin Ire"},
+      {en:"I am from...",tl:"Ich komme aus..."},
+      {en:"I live in...",tl:"Ich wohne in..."},
+      {en:"I was born in...",tl:"Ich wurde in ... geboren"},
+      {en:"I am tall",tl:"Ich bin groß"},
+      {en:"I have brown hair",tl:"Ich habe braune Haare"},
+      {en:"I have blue eyes",tl:"Ich habe blaue Augen"},
+      {en:"I am quite shy",tl:"Ich bin ziemlich schüchtern"},
+    ],
+    family: [
+      {en:"I have a big family",tl:"Ich habe eine große Familie"},
+      {en:"I have a brother",tl:"Ich habe einen Bruder"},
+      {en:"I have a sister",tl:"Ich habe eine Schwester"},
+      {en:"I am an only child",tl:"Ich bin ein Einzelkind"},
+      {en:"My mother works as...",tl:"Meine Mutter arbeitet als..."},
+      {en:"My father is...",tl:"Mein Vater ist..."},
+      {en:"I get on well with my family",tl:"Ich verstehe mich gut mit meiner Familie"},
+      {en:"My best friend is called...",tl:"Mein bester Freund heißt..."},
+      {en:"We live in a house",tl:"Wir wohnen in einem Haus"},
+      {en:"I have a dog",tl:"Ich habe einen Hund"},
+    ],
+    likes: [
+      {en:"I love music",tl:"Ich liebe Musik"},
+      {en:"I like sport",tl:"Ich mag Sport"},
+      {en:"I don't like vegetables",tl:"Ich mag kein Gemüse"},
+      {en:"My favourite subject is...",tl:"Mein Lieblingsfach ist..."},
+      {en:"I hate getting up early",tl:"Ich hasse es früh aufzustehen"},
+      {en:"I prefer...",tl:"Ich bevorzuge..."},
+      {en:"I am mad about football",tl:"Ich bin fußballverrückt"},
+      {en:"I love going out with friends",tl:"Ich gehe gerne mit Freunden aus"},
+      {en:"I find it boring",tl:"Ich finde es langweilig"},
+      {en:"It is really interesting",tl:"Es ist wirklich interessant"},
+    ],
+    school: [
+      {en:"I go to school in...",tl:"Ich gehe zur Schule in..."},
+      {en:"My school is quite big",tl:"Meine Schule ist ziemlich groß"},
+      {en:"I study ten subjects",tl:"Ich lerne zehn Fächer"},
+      {en:"School starts at nine",tl:"Die Schule beginnt um neun Uhr"},
+      {en:"I find maths difficult",tl:"Ich finde Mathe schwierig"},
+      {en:"I am good at languages",tl:"Ich bin gut in Sprachen"},
+      {en:"I wear a uniform",tl:"Ich trage eine Schuluniform"},
+      {en:"I travel to school by bus",tl:"Ich fahre mit dem Bus zur Schule"},
+      {en:"I eat lunch in the canteen",tl:"Ich esse in der Kantine zu Mittag"},
+      {en:"My favourite teacher is...",tl:"Mein Lieblingslehrer ist..."},
+    ],
+    hobbies: [
+      {en:"In my free time I...",tl:"In meiner Freizeit..."},
+      {en:"At the weekend I...",tl:"Am Wochenende..."},
+      {en:"I play football",tl:"Ich spiele Fußball"},
+      {en:"I listen to music",tl:"Ich höre Musik"},
+      {en:"I watch television",tl:"Ich schaue Fernsehen"},
+      {en:"I go to the gym",tl:"Ich gehe ins Fitnessstudio"},
+      {en:"I read a lot",tl:"Ich lese viel"},
+      {en:"I play video games",tl:"Ich spiele Videospiele"},
+      {en:"I go out with friends",tl:"Ich gehe mit Freunden aus"},
+      {en:"I go swimming",tl:"Ich gehe schwimmen"},
+    ],
+    opinions: [
+      {en:"I think that...",tl:"Ich denke dass..."},
+      {en:"In my opinion...",tl:"Meiner Meinung nach..."},
+      {en:"I believe that...",tl:"Ich glaube dass..."},
+      {en:"It is important to...",tl:"Es ist wichtig zu..."},
+      {en:"The best thing is...",tl:"Das Beste ist..."},
+      {en:"The worst thing is...",tl:"Das Schlimmste ist..."},
+      {en:"I would like to...",tl:"Ich möchte..."},
+      {en:"In the future I want to...",tl:"In der Zukunft möchte ich..."},
+      {en:"I am proud of...",tl:"Ich bin stolz auf..."},
+      {en:"It seems to me that...",tl:"Es scheint mir dass..."},
+    ],
+  }
+};
+
+// ============================================================
+// GAME STATE — mirrors original exactly
+// ============================================================
+const BROTHER_UNLOCK = 30;
+const PENALTY_SECS   = 20;
+const QUESTIONS_PER_LEVEL = 7;
+
+let currentLang     = 'es';
+let currentCat      = 'identity';
+let currentLevel    = 1;
+let currentPhrases  = [];
+let startTime, timerInterval;
+
+const levelList         = document.getElementById('level-list');
+const gameContainer     = document.getElementById('game');
+const questionsContainer= document.getElementById('questions');
+const resultsContainer  = document.getElementById('results');
+
+// ============================================================
+// LOCALSTORAGE HELPERS
+// ============================================================
+function getUnlocked(lang)          { return parseInt(localStorage.getItem('turbo_unlocked_' + lang) || '1'); }
+function setUnlocked(lang, level)   { if (level > getUnlocked(lang)) localStorage.setItem('turbo_unlocked_' + lang, level); }
+function getBest(lang, cat, level)  { return localStorage.getItem('turbo_best_' + lang + '_' + cat + '_' + level); }
+function setBest(lang, cat, level, stars) {
+  const prev = parseInt(getBest(lang, cat, level) || '0');
+  if (stars > prev) localStorage.setItem('turbo_best_' + lang + '_' + cat + '_' + level, stars);
+}
+function getTotalStars() {
+  let total = 0;
+  ['es','fr','de'].forEach(function(l) {
+    ['identity','family','likes','school','hobbies','opinions'].forEach(function(c) {
+      for (var v = 1; v <= 10; v++) total += parseInt(getBest(l, c, v) || '0');
+    });
+  });
+  return total;
+}
+function brotherUnlocked() { return getTotalStars() >= BROTHER_UNLOCK; }
+
+// ============================================================
+// PICKERS
+// ============================================================
+function selectLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderLevels();
+}
+
+function selectCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderLevels();
+}
+
+// ============================================================
+// RENDER LEVELS — same pattern as original
+// ============================================================
+function renderLevels() {
+  levelList.style.display = 'flex';
+  gameContainer.style.display = 'none';
+  levelList.innerHTML = '';
+  updateProgress();
+
+  var unlocked = getUnlocked(currentLang);
+
+  for (var i = 1; i <= 10; i++) {
+    var btn = document.createElement('button');
+    var best = getBest(currentLang, currentCat, i);
+    var locked = i > unlocked;
+    var stars = best ? '⭐'.repeat(parseInt(best)) + '☆'.repeat(3 - parseInt(best)) : '';
+    btn.textContent = (locked ? '🔒 ' : '') + 'Level ' + i + (stars ? '  ' + stars : (locked ? '' : '  — Not played'));
+    btn.disabled = locked;
+    (function(level) {
+      btn.addEventListener('click', function() { startGame(level); });
+    })(i);
+    levelList.appendChild(btn);
+  }
+
+  // Brother button
+  if (brotherUnlocked()) {
+    var bb = document.createElement('button');
+    bb.textContent = '🧓 Enter The Brother';
+    bb.className = 'brother-btn';
+    bb.addEventListener('click', function() { window.location.href = 'brother.html'; });
+    levelList.appendChild(bb);
+  }
+}
+
+function updateProgress() {
+  var stars = getTotalStars();
+  var pct = Math.min(100, Math.round((stars / BROTHER_UNLOCK) * 100));
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+// ============================================================
+// START GAME — same pattern as original
+// ============================================================
+function startGame(level) {
+  currentLevel = level;
+  var pool = PHRASES[currentLang][currentCat];
+  currentPhrases = shuffleArray(pool.slice()).slice(0, QUESTIONS_PER_LEVEL);
+
+  levelList.style.display = 'none';
+  gameContainer.style.display = 'block';
+  questionsContainer.innerHTML = '';
+  resultsContainer.innerHTML = '';
+
+  currentPhrases.forEach(function(phrase) {
+    var div = document.createElement('div');
+    div.innerHTML = '<strong>' + phrase.en + '</strong><br><input type="text" data-answer="' + phrase.tl + '" placeholder="Type in ' + langName(currentLang) + '...">';
+    questionsContainer.appendChild(div);
+  });
+
+  startTimer();
+}
+
+function shuffleArray(array) {
+  return array.sort(function() { return Math.random() - 0.5; });
+}
+
+function langName(lang) {
+  return { es: 'Spanish', fr: 'French', de: 'German' }[lang];
+}
+
+// ============================================================
+// TIMER — same as original
+// ============================================================
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(function() {
+    var elapsed = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('timer').textContent = 'Time: ' + elapsed + 's';
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+// ============================================================
+// SUBMIT — same pattern as original
+// ============================================================
+document.getElementById('submit').addEventListener('click', function() {
+  stopTimer();
+  var elapsed = Math.floor((Date.now() - startTime) / 1000);
+  var penalty = 0;
+  var correct = 0;
+  var total   = currentPhrases.length;
+
+  document.querySelectorAll('#questions input').forEach(function(input) {
+    var userAns    = input.value.trim();
+    var correctAns = input.dataset.answer;
+    if (normalise(userAns) === normalise(correctAns)) {
+      correct++;
+      input.style.border = '2px solid green';
+    } else {
+      penalty += PENALTY_SECS;
+      input.style.border = '2px solid red';
+    }
+  });
+
+  var totalTime = elapsed + penalty;
+
+  // Stars
+  var stars = 0;
+  if (correct === total && totalTime <= levelUnlockTime(currentLevel)) stars = 3;
+  else if (correct === total) stars = 2;
+  else if (correct >= Math.ceil(total * 0.5)) stars = 1;
+
+  setBest(currentLang, currentCat, currentLevel, stars);
+
+  // Unlock next level
+  if (stars >= 1) setUnlocked(currentLang, currentLevel + 1);
+
+  // Results
+  resultsContainer.innerHTML = '<h3>Game Over!</h3>'
+    + '<p>Correct: ' + correct + '/' + total + '</p>'
+    + '<p>Time: ' + elapsed + 's + Penalty: ' + penalty + 's = <strong>' + totalTime + 's</strong></p>'
+    + '<p>' + '⭐'.repeat(stars) + '☆'.repeat(3 - stars) + '</p>'
+    + '<h4>Feedback:</h4>';
+
+  document.querySelectorAll('#questions input').forEach(function(input) {
+    var userAns    = input.value.trim();
+    var correctAns = input.dataset.answer;
+    if (normalise(userAns) !== normalise(correctAns)) {
+      var p = document.createElement('p');
+      p.innerHTML = '<strong>' + input.previousSibling.previousSibling.textContent + '</strong>'
+        + ' → <span style="color:green">' + correctAns + '</span>'
+        + ' | Your answer: <span style="color:red">' + (userAns || '(blank)') + '</span>';
+      resultsContainer.appendChild(p);
+    }
+  });
+
+  // Unlock message
+  if (stars >= 1) {
+    var uMsg = document.createElement('p');
+    uMsg.className = 'unlock-msg';
+    uMsg.textContent = '🔓 Level ' + (currentLevel + 1) + ' Unlocked!';
+    resultsContainer.appendChild(uMsg);
+  }
+
+  // Brother unlock
+  updateProgress();
+  if (brotherUnlocked()) {
+    var bMsg = document.createElement('p');
+    bMsg.className = 'unlock-msg';
+    bMsg.innerHTML = '🧓 You\'ve earned The Brother! <a href="brother.html" style="color:#2d5a27;font-weight:bold;">Enter →</a>';
+    resultsContainer.appendChild(bMsg);
+  }
+
+  // Perfect
+  if (correct === total && penalty === 0) {
+    var cel = document.createElement('div');
+    cel.className = 'perfect-celebration';
+    cel.textContent = '🎉 PERFECT GAME! 🎉';
+    resultsContainer.prepend(cel);
+    setTimeout(function() { cel.remove(); }, 5000);
+  }
+
+  // Buttons
+  var tryBtn = document.createElement('button');
+  tryBtn.textContent = 'Try Again';
+  tryBtn.className = 'try-again';
+  tryBtn.onclick = function() { startGame(currentLevel); };
+  resultsContainer.appendChild(tryBtn);
+
+  var backBtn = document.createElement('button');
+  backBtn.textContent = 'Back to Levels';
+  backBtn.id = 'back-button';
+  backBtn.onclick = function() { renderLevels(); };
+  resultsContainer.appendChild(backBtn);
+});
+
+function levelUnlockTime(level) {
+  return 120 - (level - 1) * 5;
+}
+
+function normalise(s) {
+  return String(s).toLowerCase()
+    .replace(/\.\.\./g,'')
+    .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a')
+    .replace(/[îï]/g,'i').replace(/[ôö]/g,'o')
+    .replace(/[ûü]/g,'u').replace(/[ç]/g,'c')
+    .replace(/[ñ]/g,'n').replace(/[ß]/g,'ss')
+    .trim();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderLevels();
+</script>
+</body>
+</html>
