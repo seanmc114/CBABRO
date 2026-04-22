@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Brother — CBA Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c1917;
+      --paper: #faf7f2;
+      --aged: #f0ead6;
+      --brother: #1a5c38;
+      --brother-light: #e8f5ee;
+      --gold: #b45309;
+      --teal: #0f766e;
+      --coral: #be123c;
+      --muted: #78716c;
+      --border: #d6d3c4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--paper);
+      min-height: 100vh;
+      color: var(--ink);
+    }
+
+    /* ---- SCREENS ---- */
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ============================================================
+       WELCOME SCREEN
+    ============================================================ */
+    #screen-welcome {
+      justify-content: center;
+      align-items: center;
+      background: var(--ink);
+      padding: 30px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    #screen-welcome::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(26,92,56,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 80%, rgba(26,92,56,0.1) 0%, transparent 50%);
+    }
+    .welcome-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .brother-figure {
+      font-size: 6rem;
+      margin-bottom: 16px;
+      animation: brotherBob 4s ease-in-out infinite;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(26,92,56,0.4));
+    }
+    @keyframes brotherBob {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    .welcome-title {
+      font-family: 'Lora', serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+    }
+    .welcome-sub {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.9rem;
+      margin-bottom: 36px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .welcome-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .field-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 18px;
+    }
+    .field-input:focus { border-color: var(--brother); }
+    .field-input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .lang-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .lang-choice {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-choice:hover { border-color: rgba(26,92,56,0.5); color: white; }
+    .lang-choice.selected { background: var(--brother); border-color: var(--brother); color: white; }
+    .lang-choice .flag { font-size: 1.4rem; }
+
+    .enter-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--brother);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .enter-btn:hover { filter: brightness(1.15); transform: scale(1.01); }
+    .enter-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .week-picker {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .week-btn {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 10px 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .week-btn:hover { border-color: rgba(26,92,56,0.5); color: white; }
+    .week-btn.selected { background: var(--brother); border-color: var(--brother); color: white; }
+
+    .turbo-note {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    /* ============================================================
+       REVEAL SCREEN
+    ============================================================ */
+    #screen-reveal {
+      justify-content: center;
+      align-items: center;
+      background: var(--ink);
+      padding: 40px 20px;
+    }
+    .reveal-inner {
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+    }
+    .brother-big {
+      font-size: 8rem;
+      display: block;
+      animation: revealFloat 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 40px rgba(26,92,56,0.8));
+      margin-bottom: 20px;
+    }
+    @keyframes revealFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+    .reveal-text {
+      font-family: 'Lora', serif;
+      font-size: 1.6rem;
+      color: white;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .reveal-sub {
+      color: rgba(255,255,255,0.45);
+      font-size: 1rem;
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+    .reveal-btn {
+      background: var(--brother);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 16px 40px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .reveal-btn:hover { filter: brightness(1.15); transform: scale(1.02); }
+
+    /* ============================================================
+       CHAT SCREEN
+    ============================================================ */
+    #screen-chat {
+      background: var(--paper);
+      flex-direction: column;
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Header */
+    .chat-header {
+      background: var(--ink);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+    .chat-header-brother { font-size: 1.8rem; animation: brotherBob 4s ease-in-out infinite; }
+    .chat-header-info { flex: 1; }
+    .chat-header-name {
+      font-family: 'Lora', serif;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .chat-header-week {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75rem;
+    }
+    .chat-header-actions { display: flex; gap: 8px; }
+    .header-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .header-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+
+    /* Week indicator */
+    .week-bar {
+      display: flex;
+      background: rgba(0,0,0,0.6);
+      flex-shrink: 0;
+    }
+    .week-pip {
+      flex: 1;
+      padding: 6px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .week-pip.active { color: white; background: rgba(26,92,56,0.4); }
+    .week-pip:hover { color: rgba(255,255,255,0.6); }
+
+    /* Messages */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 85%;
+      animation: msgIn 0.3s ease;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg.brother { align-self: flex-start; }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+
+    .msg-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .msg.brother .msg-avatar { background: var(--brother); }
+    .msg.user .msg-avatar { background: var(--aged); border: 2px solid var(--border); }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .msg.brother .msg-bubble {
+      background: white;
+      border: 1px solid var(--border);
+      border-top-left-radius: 4px;
+      color: var(--ink);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .msg.user .msg-bubble {
+      background: var(--brother);
+      color: white;
+      border-top-right-radius: 4px;
+    }
+
+    /* Fact card inside message */
+    .fact-card {
+      background: var(--brother-light);
+      border-left: 3px solid var(--brother);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+    .fact-tl { color: var(--brother); font-weight: 700; margin-top: 4px; font-style: italic; }
+
+    /* Quote card */
+    .quote-card {
+      background: var(--aged);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      border-top-left-radius: 4px;
+      width: fit-content;
+    }
+    .typing-dot {
+      width: 7px; height: 7px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: typingBounce 1.2s ease infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%,60%,100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* Input area */
+    .chat-input-area {
+      padding: 14px 16px;
+      background: white;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .chat-input {
+      flex: 1;
+      background: var(--aged);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      padding: 12px 14px;
+      outline: none;
+      resize: none;
+      min-height: 46px;
+      max-height: 120px;
+      transition: border-color 0.2s;
+      color: var(--ink);
+    }
+    .chat-input:focus { border-color: var(--brother); }
+    .chat-input::placeholder { color: var(--muted); }
+
+    .send-btn {
+      background: var(--brother);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .send-btn:hover { filter: brightness(1.15); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .voice-btn {
+      background: var(--aged);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .voice-btn:hover { border-color: var(--brother); }
+    .voice-btn.listening { background: var(--coral); border-color: var(--coral); color: white; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+    .input-hints {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .hint-chip {
+      background: var(--brother-light);
+      color: var(--brother);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .hint-chip:hover { background: var(--brother); color: white; }
+
+    /* ============================================================
+       SCRIPT SCREEN
+    ============================================================ */
+    #screen-script {
+      background: var(--paper);
+      flex-direction: column;
+    }
+    .script-header {
+      background: var(--ink);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .script-header h2 {
+      font-family: 'Lora', serif;
+      color: white;
+      font-size: 1.1rem;
+      flex: 1;
+    }
+    .script-content { padding: 20px 16px; max-width: 720px; margin: 0 auto; width: 100%; overflow-y: auto; flex: 1; }
+
+    .script-title {
+      font-family: 'Lora', serif;
+      font-size: 1.8rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .script-meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+
+    .script-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .script-section-heading {
+      font-weight: 900;
+      color: var(--brother);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .script-tl {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      color: var(--ink);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .script-en {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      font-style: italic;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+    .script-tip {
+      background: var(--brother-light);
+      color: var(--brother);
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .script-footer {
+      background: var(--aged);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .script-footer h4 { color: var(--gold); font-size: 0.85rem; margin-bottom: 8px; font-weight: 900; text-transform: uppercase; }
+    .script-footer p { color: var(--ink); font-size: 0.9rem; line-height: 1.5; }
+
+    .print-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--ink);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 8px 0;
+      transition: all 0.2s;
+    }
+    .print-btn:hover { background: var(--brother); }
+
+    .back-to-chat {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 4px 0;
+      transition: all 0.2s;
+    }
+    .back-to-chat:hover { color: var(--ink); border-color: var(--ink); }
+
+    /* ============================================================
+       LOADING / SPINNER
+    ============================================================ */
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(26,92,56,0.2);
+      border-top-color: var(--brother);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       PRINT
+    ============================================================ */
+    @media print {
+      .chat-header, .chat-input-area, .week-bar, .print-btn, .back-to-chat, .script-header { display: none !important; }
+      body { background: white; }
+      .script-content { padding: 0; }
+      .script-section { border: 1px solid #ccc; break-inside: avoid; }
+    }
+
+    /* Util */
+    .hidden { display: none !important; }
+    .loading-msg {
+      text-align: center;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 20px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundled.js"></script>
+</head>
+<body>
+
+<!-- ============================================================
+     SCREEN 1: WELCOME
+============================================================ -->
+<div id="screen-welcome" class="screen active">
+  <div class="welcome-inner">
+    <svg class="brother-figure" viewBox="0 0 200 260" width="160" height="208" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body / cardigan -->
+      <ellipse cx="100" cy="190" rx="58" ry="72" fill="#2d5a27"/>
+      <rect x="42" y="155" width="116" height="100" rx="20" fill="#2d5a27"/>
+      <!-- Shirt visible centre -->
+      <rect x="84" y="155" width="32" height="90" rx="4" fill="#f0ead6"/>
+      <!-- Cardigan highlight -->
+      <path d="M42 165 Q55 155 72 152 L84 155 L84 245 Q62 240 42 220Z" fill="#3d7a35"/>
+      <path d="M158 165 Q145 155 128 152 L116 155 L116 245 Q138 240 158 220Z" fill="#3d7a35"/>
+      <!-- Arms -->
+      <ellipse cx="28" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="172" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <!-- Hands -->
+      <ellipse cx="28" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <ellipse cx="172" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <!-- Neck -->
+      <rect x="86" y="128" width="28" height="32" rx="8" fill="#d4956a"/>
+      <!-- Head -->
+      <ellipse cx="100" cy="100" rx="54" ry="60" fill="#d4956a"/>
+      <!-- White hair — top and sides -->
+      <ellipse cx="100" cy="52" rx="52" ry="28" fill="#e8e2d0"/>
+      <path d="M48 72 Q44 55 50 42 Q58 28 72 24 Q86 20 100 20 Q114 20 128 24 Q142 28 150 42 Q156 55 152 72" fill="#e8e2d0"/>
+      <!-- Hair shadow/depth -->
+      <path d="M52 78 Q50 62 56 48 Q66 32 100 28 Q134 32 144 48 Q150 62 148 78" fill="#c8bfaa" opacity="0.5"/>
+      <!-- Side hair wisps -->
+      <path d="M48 85 Q42 95 44 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <path d="M152 85 Q158 95 156 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <!-- Forehead skin -->
+      <ellipse cx="100" cy="80" rx="44" ry="22" fill="#d4956a"/>
+      <!-- Cheeks flush -->
+      <ellipse cx="72" cy="112" rx="12" ry="8" fill="#e8906a" opacity="0.35"/>
+      <ellipse cx="128" cy="112" rx="12" ry="8" fill="#e8906a" opacity="0.35"/>
+      <!-- Wrinkles -->
+      <path d="M70 88 Q76 85 82 88" fill="none" stroke="#b87a52" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+      <path d="M118 88 Q124 85 130 88" fill="none" stroke="#b87a52" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+      <path d="M80 128 Q100 136 120 128" fill="none" stroke="#b87a52" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+      <!-- Eyebrows — bushy, grey -->
+      <path d="M68 90 Q82 84 96 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <path d="M104 90 Q118 84 132 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <!-- Eyes -->
+      <ellipse cx="82" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="118" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="82" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="118" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="82" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="118" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="84" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="120" cy="100" rx="2" ry="2" fill="white"/>
+      <!-- Glasses -->
+      <ellipse cx="82" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="118" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M97 103 Q100 100 103 103" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M67 99 Q60 96 54 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M133 99 Q140 96 146 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <!-- Nose -->
+      <ellipse cx="100" cy="118" rx="9" ry="7" fill="#c08060"/>
+      <ellipse cx="100" cy="115" rx="6" ry="5" fill="#c88a62"/>
+      <!-- Smile — warm -->
+      <path d="M82 132 Q100 144 118 132" fill="none" stroke="#8a5a3a" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Ears -->
+      <ellipse cx="46" cy="105" rx="9" ry="13" fill="#c08060"/>
+      <ellipse cx="154" cy="105" rx="9" ry="13" fill="#c08060"/>
+    </svg>
+    <h1 class="welcome-title">The Brother</h1>
+    <p class="welcome-sub">Your mentor. Your script. Your presentation.</p>
+
+    <div class="welcome-card">
+      <label class="field-label">Your first name</label>
+      <input class="field-input" id="inp-name" type="text" placeholder="What do they call you?" maxlength="30" autocomplete="off">
+
+      <label class="field-label">Your language</label>
+      <div class="lang-row">
+        <button class="lang-choice selected" data-lang="es" onclick="selectLang(this)">
+          <span class="flag">🇪🇸</span>Spanish
+        </button>
+        <button class="lang-choice" data-lang="fr" onclick="selectLang(this)">
+          <span class="flag">🇫🇷</span>French
+        </button>
+        <button class="lang-choice" data-lang="de" onclick="selectLang(this)">
+          <span class="flag">🇩🇪</span>German
+        </button>
+      </div>
+
+      <div style="height:18px;"></div>
+
+      <label class="field-label">Which week are you in?</label>
+      <div class="week-picker">
+        <button class="week-btn selected" data-week="1" onclick="selectWeek(this)">Week 1<br><small>Exploring</small></button>
+        <button class="week-btn" data-week="2" onclick="selectWeek(this)">Week 2<br><small>Building</small></button>
+        <button class="week-btn" data-week="3" onclick="selectWeek(this)">Week 3<br><small>Showtime</small></button>
+      </div>
+
+      <p class="turbo-note">Played Turbo? Good. The Brother knows.</p>
+    </div>
+
+    <button class="enter-btn" id="enter-btn" onclick="enterBrother()">Meet The Brother →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 2: REVEAL
+============================================================ -->
+<div id="screen-reveal" class="screen">
+  <div class="reveal-inner">
+    <svg class="brother-big" viewBox="0 0 200 260" width="180" height="234" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="190" rx="58" ry="72" fill="#2d5a27"/>
+      <rect x="42" y="155" width="116" height="100" rx="20" fill="#2d5a27"/>
+      <rect x="84" y="155" width="32" height="90" rx="4" fill="#f0ead6"/>
+      <path d="M42 165 Q55 155 72 152 L84 155 L84 245 Q62 240 42 220Z" fill="#3d7a35"/>
+      <path d="M158 165 Q145 155 128 152 L116 155 L116 245 Q138 240 158 220Z" fill="#3d7a35"/>
+      <ellipse cx="28" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="172" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="28" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <ellipse cx="172" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <rect x="86" y="128" width="28" height="32" rx="8" fill="#d4956a"/>
+      <ellipse cx="100" cy="100" rx="54" ry="60" fill="#d4956a"/>
+      <ellipse cx="100" cy="52" rx="52" ry="28" fill="#e8e2d0"/>
+      <path d="M48 72 Q44 55 50 42 Q58 28 72 24 Q86 20 100 20 Q114 20 128 24 Q142 28 150 42 Q156 55 152 72" fill="#e8e2d0"/>
+      <path d="M52 78 Q50 62 56 48 Q66 32 100 28 Q134 32 144 48 Q150 62 148 78" fill="#c8bfaa" opacity="0.5"/>
+      <path d="M48 85 Q42 95 44 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <path d="M152 85 Q158 95 156 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="100" cy="80" rx="44" ry="22" fill="#d4956a"/>
+      <ellipse cx="72" cy="112" rx="12" ry="8" fill="#e8906a" opacity="0.35"/>
+      <ellipse cx="128" cy="112" rx="12" ry="8" fill="#e8906a" opacity="0.35"/>
+      <path d="M68 90 Q82 84 96 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <path d="M104 90 Q118 84 132 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="82" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="118" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="82" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="118" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="82" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="118" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="84" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="120" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="82" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="118" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M97 103 Q100 100 103 103" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M67 99 Q60 96 54 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M133 99 Q140 96 146 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="100" cy="118" rx="9" ry="7" fill="#c08060"/>
+      <ellipse cx="100" cy="115" rx="6" ry="5" fill="#c88a62"/>
+      <path d="M82 132 Q100 144 118 132" fill="none" stroke="#8a5a3a" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="46" cy="105" rx="9" ry="13" fill="#c08060"/>
+      <ellipse cx="154" cy="105" rx="9" ry="13" fill="#c08060"/>
+    </svg>
+    <p class="reveal-text" id="reveal-text">Ah. There you are.</p>
+    <p class="reveal-sub" id="reveal-sub">Good work on Turbo. Now let's build something real.<br>Good. You're ready. Let's build something.</p>
+    <button class="reveal-btn" onclick="goToChat()">Let's go →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 3: CHAT
+============================================================ -->
+<div id="screen-chat" class="screen">
+  <div class="chat-header">
+    <span class="chat-header-brother">🧓</span>
+    <div class="chat-header-info">
+      <div class="chat-header-name">The Brother</div>
+      <div class="chat-header-week" id="header-week-label">Week 1 · Spanish</div>
+    </div>
+    <div class="chat-header-actions">
+      <button class="header-btn" onclick="buildScript()">📄 Script</button>
+      <button class="header-btn" onclick="buildSlides()">🎞️ Slides</button>
+      <button class="header-btn" onclick="showReflect()">✍️ Reflect</button>
+      <button class="header-btn" onclick="goHome()">Home</button>
+    </div>
+  </div>
+
+  <div class="week-bar" id="week-bar">
+    <div class="week-pip active" data-week="1" onclick="changeWeek(1)">Week 1 — Explore</div>
+    <div class="week-pip" data-week="2" onclick="changeWeek(2)">Week 2 — Build</div>
+    <div class="week-pip" data-week="3" onclick="changeWeek(3)">Week 3 — Showtime</div>
+  </div>
+
+  <div class="chat-messages" id="chat-messages"></div>
+
+  <div class="chat-input-area">
+    <div class="input-row">
+      <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" title="Speak your answer">🎤</button>
+      <textarea class="chat-input" id="chat-input" placeholder="Type here or tap the mic..." rows="1"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+    <div class="input-hints" id="input-hints">
+      <button class="hint-chip" onclick="useHint('Tell me about yourself')">About me</button>
+      <button class="hint-chip" onclick="useHint('Help me with a sentence')">Help a sentence</button>
+      <button class="hint-chip" onclick="useHint('Give me a mad fact')">Mad fact! 🤯</button>
+      <button class="hint-chip" onclick="useHint('How am I doing?')">How am I doing?</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 4: SCRIPT
+============================================================ -->
+<div id="screen-script" class="screen">
+  <div class="script-header">
+    <h2>📄 Your Script</h2>
+    <button class="header-btn" onclick="showScreen('screen-chat')">← Back to chat</button>
+  </div>
+  <div class="script-content" id="script-content">
+    <div class="loading-msg">Building your script... <span class="spinner"></span></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG — set your Worker URL here
+// ============================================================
+const WORKER_URL = 'https://patient-morning-62fc.seansynge.workers.dev';
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  name: '',
+  lang: 'es',
+  week: 1,
+  history: [],
+  unlockedPhrases: [],
+  scriptData: null,
+};
+
+const LANG_NAMES = { es: 'Spanish', fr: 'French', de: 'German' };
+const WEEK_LABELS = { 1: 'Exploring', 2: 'Building', 3: 'Showtime 🎤' };
+
+// ============================================================
+// MOTIVATIONAL QUOTES (shown occasionally)
+// ============================================================
+const QUOTES = [
+  { en: "The secret of getting ahead is getting started.", tl_es: "El secreto para avanzar es empezar.", tl_fr: "Le secret pour avancer, c'est de commencer.", tl_de: "Das Geheimnis des Fortschritts ist der Anfang." },
+  { en: "Every expert was once a beginner.", tl_es: "Todo experto fue alguna vez un principiante.", tl_fr: "Tout expert a été un jour débutant.", tl_de: "Jeder Experte war einmal Anfänger." },
+  { en: "You don't have to be great to start, but you have to start to be great.", tl_es: "No tienes que ser bueno para empezar, pero tienes que empezar para ser bueno.", tl_fr: "Il ne faut pas être bon pour commencer, mais il faut commencer pour être bon.", tl_de: "Du musst nicht gut sein, um anzufangen, aber du musst anfangen, um gut zu sein." },
+  { en: "Courage is speaking even when your voice shakes.", tl_es: "El valor es hablar aunque te tiemble la voz.", tl_fr: "Le courage, c'est parler même quand ta voix tremble.", tl_de: "Mut bedeutet zu sprechen, auch wenn deine Stimme zittert." },
+];
+
+// ============================================================
+// WELCOME SCREEN
+// ============================================================
+function selectLang(btn) {
+  document.querySelectorAll('.lang-choice').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.lang = btn.dataset.lang;
+}
+
+function selectWeek(btn) {
+  document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.week = parseInt(btn.dataset.week);
+}
+
+function enterBrother() {
+  const name = document.getElementById('inp-name').value.trim();
+  if (!name) { document.getElementById('inp-name').focus(); return; }
+  state.name = name;
+
+  // Load any unlocked phrases from Turbo localStorage
+  state.unlockedPhrases = getUnlockedPhrases();
+
+  // Save to localStorage
+  localStorage.setItem('brother_name', name);
+  localStorage.setItem('brother_lang', state.lang);
+  localStorage.setItem('brother_week', state.week);
+
+  // Load existing history if any
+  const saved = localStorage.getItem(`brother_history_${state.lang}`);
+  state.history = saved ? JSON.parse(saved) : [];
+
+  showReveal();
+}
+
+function getUnlockedPhrases() {
+  // Pull best-scored phrases from Turbo localStorage
+  const phrases = [];
+  const cats = ['identity','family','likes','school','hobbies','opinions'];
+  cats.forEach(cat => {
+    for (let lv = 1; lv <= 5; lv++) {
+      const stars = localStorage.getItem(`turbo_best_${state.lang}_${cat}_${lv}`);
+      if (stars && parseInt(stars) >= 2) {
+        phrases.push(`[${cat}] Level ${lv} — strong performance`);
+      }
+    }
+  });
+  return phrases;
+}
+
+// ============================================================
+// REVEAL SCREEN
+// ============================================================
+function showReveal() {
+  const week = state.week;
+  const name = state.name;
+  const revealText = document.getElementById('reveal-text');
+  const revealSub = document.getElementById('reveal-sub');
+
+  if (week === 3) {
+    revealText.textContent = `${name}. Week 3. Right.`;
+    revealSub.textContent = `No messing around now. Presentations are coming.\nLet's make sure you're ready.`;
+  } else if (week === 2) {
+    revealText.textContent = `Back again, ${name}.`;
+    revealSub.textContent = `Good. Week 2. Time to take what you have\nand make it into something real.`;
+  } else {
+    revealText.textContent = `Ah. There you are, ${name}.`;
+    revealSub.textContent = `Good work on Turbo. Now let's build something real.\nGood. You're ready. Let's build something.`;
+  }
+
+  showScreen('screen-reveal');
+}
+
+function goToChat() {
+  setupChatHeader();
+  showScreen('screen-chat');
+
+  // First message if no history
+  if (state.history.length === 0) {
+    openingMessage();
+  } else {
+    renderHistory();
+  }
+}
+
+// ============================================================
+// CHAT
+// ============================================================
+function setupChatHeader() {
+  document.getElementById('header-week-label').textContent =
+    `Week ${state.week} · ${LANG_NAMES[state.lang]}`;
+
+  document.querySelectorAll('.week-pip').forEach(pip => {
+    pip.classList.toggle('active', parseInt(pip.dataset.week) === state.week);
+  });
+}
+
+async function openingMessage() {
+  const name = state.name;
+  const lang = LANG_NAMES[state.lang];
+  const week = state.week;
+
+  let opener;
+  if (week === 1) {
+    opener = `Right, ${name}. Welcome. I'm The Brother — and I'm going to help you get through this CBA in one piece.\n\nHere's the deal: you've got three weeks. In that time we're going to build a presentation about you — your life, your interests, your opinions — in ${lang}. And it's going to be good.\n\nBut first things first. Tell me about yourself. Who is ${name}? Where are you from, what are you into, what do you actually care about? Don't be shy — this whole thing is about you.`;
+  } else if (week === 2) {
+    opener = `${name}. Week 2. Good — you're still here, that's something.\n\nBy now you should have a rough idea of what you want to talk about. Let's sharpen it up. Tell me what you've got so far — what topics, what phrases, what format are you thinking? And we'll turn it into something solid.\n\nCome on. What have you got?`;
+  } else {
+    opener = `${name}. Week 3. Right. I won't waste your time with pleasantries.\n\nPresentations are coming. Let's see where you are. Tell me — what are you opening with? First sentence of your presentation, go.`;
+  }
+
+  addMessage('brother', opener);
+  saveHistory();
+}
+
+function renderHistory() {
+  const container = document.getElementById('chat-messages');
+  container.innerHTML = '';
+  state.history.forEach(msg => {
+    renderMessage(msg.role, msg.content, false);
+  });
+  scrollToBottom();
+}
+
+function addMessage(role, content) {
+  state.history.push({ role, content });
+  saveHistory();
+  renderMessage(role, content, true);
+  scrollToBottom();
+}
+
+function renderMessage(role, content, animate) {
+  const container = document.getElementById('chat-messages');
+  const wrapper = document.createElement('div');
+  wrapper.className = `msg ${role}`;
+  if (!animate) wrapper.style.animation = 'none';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = role === 'brother' ? '🧓' : '🧑';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  // Format content — handle line breaks
+  const formatted = content.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+  bubble.innerHTML = `<p>${formatted}</p>`;
+
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(bubble);
+  container.appendChild(wrapper);
+}
+
+function showTyping() {
+  const container = document.getElementById('chat-messages');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'msg brother';
+  wrapper.id = 'typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = '🧓';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'typing-indicator';
+  bubble.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(bubble);
+  container.appendChild(wrapper);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  autoResize(input);
+
+  addMessage('user', text);
+  showTyping();
+
+  document.getElementById('send-btn').disabled = true;
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'chat',
+        name: state.name,
+        lang: state.lang,
+        week: state.week,
+        history: state.history,
+        unlocked_phrases: state.unlockedPhrases,
+      })
+    });
+    const data = await res.json();
+    hideTyping();
+
+    let reply = data.reply || "Sorry, something went wrong there. Try again.";
+
+    // Occasionally inject a quote (every ~5 messages)
+    if (state.history.length % 10 === 8) {
+      const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+      const tl = q[`tl_${state.lang}`] || q.tl_es;
+      reply += `\n\n💬 "${q.en}"\n${tl}`;
+    }
+
+    addMessage('brother', reply);
+  } catch (err) {
+    hideTyping();
+    addMessage('brother', `Hmm. I lost the connection there for a second. Try again — don't let it put you off.`);
+  }
+
+  document.getElementById('send-btn').disabled = false;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function useHint(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function changeWeek(week) {
+  state.week = week;
+  localStorage.setItem('brother_week', week);
+  setupChatHeader();
+
+  const weekMsg = week === 3
+    ? `Right, ${state.name} — we're in Week 3 now. Time is nearly up. Let's see what you have and get this finished.`
+    : week === 2
+    ? `Week 2 now, ${state.name}. Good. Let's take what you have and build it into something solid.`
+    : `Back to Week 1 thinking — let's explore.`;
+
+  addMessage('brother', weekMsg);
+}
+
+function goHome() {
+  showScreen('screen-welcome');
+}
+
+// ============================================================
+// VOICE INPUT
+// ============================================================
+let recognition = null;
+let isListening = false;
+
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input is not supported in this browser. Try Chrome.');
+    return;
+  }
+
+  if (isListening) {
+    recognition.stop();
+    return;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = state.lang === 'es' ? 'es-ES' : state.lang === 'fr' ? 'fr-FR' : 'de-DE';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    isListening = true;
+    document.getElementById('voice-btn').classList.add('listening');
+    document.getElementById('voice-btn').textContent = '🔴';
+  };
+
+  recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    document.getElementById('chat-input').value = transcript;
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    document.getElementById('voice-btn').classList.remove('listening');
+    document.getElementById('voice-btn').textContent = '🎤';
+  };
+
+  recognition.start();
+}
+
+// Text to speech
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  const lang = state.lang === 'es' ? 'es-ES' : state.lang === 'fr' ? 'fr-FR' : 'de-DE';
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.9;
+  window.speechSynthesis.speak(utterance);
+}
+
+// ============================================================
+// SCRIPT BUILDING
+// ============================================================
+async function buildScript() {
+  showScreen('screen-script');
+  document.getElementById('script-content').innerHTML = '<div class="loading-msg">The Brother is building your script... <span class="spinner"></span></div>';
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'script_build',
+        name: state.name,
+        lang: state.lang,
+        history: state.history,
+        format: 'visual presentation',
+      })
+    });
+    const data = await res.json();
+
+    if (data.script) {
+      renderScript(data.script);
+      state.scriptData = data.script;
+    } else {
+      document.getElementById('script-content').innerHTML = '<div class="loading-msg">Hmm, could not build the script yet. Go back and chat a bit more first.</div>';
+    }
+  } catch {
+    document.getElementById('script-content').innerHTML = '<div class="loading-msg">Connection problem. Try again in a moment.</div>';
+  }
+}
+
+function renderScript(script) {
+  const content = document.getElementById('script-content');
+  const langFull = LANG_NAMES[state.lang];
+
+  let html = `
+    <h1 class="script-title">${escHtml(script.title || 'My Presentation')}</h1>
+    <p class="script-meta">${escHtml(state.name)} · ${langFull} CBA · Week ${state.week}</p>
+  `;
+
+  (script.sections || []).forEach(sec => {
+    html += `
+      <div class="script-section">
+        <div class="script-section-heading">${escHtml(sec.heading)}</div>
+        <div class="script-tl">${escHtml(sec.target_lang)}</div>
+        <div class="script-en">${escHtml(sec.english)}</div>
+        ${sec.tips ? `<div class="script-tip">💡 ${escHtml(sec.tips)}</div>` : ''}
+      </div>
+    `;
+  });
+
+  if (script.what_to_practice) {
+    html += `
+      <div class="script-footer">
+        <h4>Focus on</h4>
+        <p>${escHtml(script.what_to_practice)}</p>
+      </div>
+    `;
+  }
+
+  if (script.encouragement) {
+    html += `
+      <div class="script-footer" style="border-color:var(--brother); background:var(--brother-light);">
+        <h4 style="color:var(--brother);">The Brother says</h4>
+        <p style="color:var(--brother);">${escHtml(script.encouragement)}</p>
+      </div>
+    `;
+  }
+
+  html += `
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="back-to-chat" onclick="showScreen('screen-chat')">← Back to The Brother</button>
+  `;
+
+  content.innerHTML = html;
+}
+
+// ============================================================
+// REFLECTION NOTE
+// ============================================================
+async function showReflect() {
+  showScreen('screen-script');
+  document.getElementById('script-content').innerHTML = '<div class="loading-msg">Writing your reflection note... <span class="spinner"></span></div>';
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'reflect',
+        name: state.name,
+        lang: state.lang,
+        history: state.history,
+      })
+    });
+    const data = await res.json();
+
+    if (data.reflect) {
+      renderReflection(data.reflect);
+    } else {
+      document.getElementById('script-content').innerHTML = '<div class="loading-msg">Not enough conversation yet. Chat more with The Brother first, then come back.</div>';
+    }
+  } catch {
+    document.getElementById('script-content').innerHTML = '<div class="loading-msg">Connection problem. Try again in a moment.</div>';
+  }
+}
+
+function renderReflection(reflect) {
+  const content = document.getElementById('script-content');
+  let html = `
+    <h1 class="script-title">Student Reflection Note</h1>
+    <p class="script-meta">${escHtml(state.name)} · ${LANG_NAMES[state.lang]} CBA</p>
+    <div class="script-section">
+      <div class="script-section-heading">My Reflection</div>
+      <div class="script-tl" style="font-family:'Nunito',sans-serif; font-size:0.95rem; line-height:1.7;">${escHtml(reflect.reflection)}</div>
+    </div>
+  `;
+
+  if (reflect.prompts && reflect.prompts.length) {
+    html += `
+      <div class="script-footer">
+        <h4>Add your own thoughts</h4>
+        ${reflect.prompts.map(p => `<p style="margin-bottom:8px;">• ${escHtml(p)}</p>`).join('')}
+      </div>
+    `;
+  }
+
+  html += `
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="back-to-chat" onclick="showScreen('screen-chat')">← Back to The Brother</button>
+  `;
+
+  content.innerHTML = html;
+}
+
+
+// ============================================================
+// SLIDES — calls worker for plan, builds real .pptx with PptxGenJS
+// ============================================================
+async function buildSlides() {
+  showScreen('screen-script');
+  document.getElementById('script-content').innerHTML = '<div class="loading-msg">The Brother is building your slides... <span class="spinner"></span></div>';
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'pptx_plan',
+        name: state.name,
+        lang: state.lang,
+        history: state.history,
+      })
+    });
+    const data = await res.json();
+    if (!data.plan) throw new Error(data.error || 'No plan returned');
+    await makePptx(data.plan);
+  } catch(e) {
+    document.getElementById('script-content').innerHTML =
+      '<div class="loading-msg">Could not build slides. Chat more with The Brother first, then try again.<br><small>' + e.message + '</small></div>';
+  }
+}
+
+async function makePptx(plan) {
+  const LANG_COLORS = { es: '2471a3', fr: 'd4213d', de: '1a1a2e' };
+  const accent = LANG_COLORS[plan.lang] || '2471a3';
+  const pptx = new PptxGenJS();
+
+  pptx.layout = 'LAYOUT_WIDE';
+  pptx.title = plan.title || (state.name + ' — CBA Presentation');
+  pptx.author = 'Synge Street CBS — The Brother';
+
+  // Define master slide colours
+  const BG = 'f8f9fa';
+  const DARK = '1a1a2e';
+  const ACCENT = accent;
+
+  plan.slides.forEach(function(slide, idx) {
+    const s = pptx.addSlide();
+
+    // Background
+    s.background = { color: idx === 0 ? DARK : BG };
+
+    // Top colour bar
+    s.addShape(pptx.ShapeType.rect, {
+      x: 0, y: 0, w: '100%', h: 0.18,
+      fill: { color: ACCENT }, line: { color: ACCENT }
+    });
+
+    if (idx === 0) {
+      // Title slide
+      s.addText(plan.title || 'Mo Chur i Láthair', {
+        x: 0.5, y: 1.2, w: 9, h: 1.4,
+        fontSize: 40, bold: true, color: 'FFFFFF',
+        align: 'center', fontFace: 'Arial'
+      });
+      s.addText(plan.student || state.name, {
+        x: 0.5, y: 2.8, w: 9, h: 0.7,
+        fontSize: 24, color: 'ccddee',
+        align: 'center', fontFace: 'Arial'
+      });
+      s.addText('Synge Street CBS', {
+        x: 0.5, y: 3.6, w: 9, h: 0.5,
+        fontSize: 14, color: '8899aa',
+        align: 'center', fontFace: 'Arial'
+      });
+    } else {
+      // Heading
+      s.addText(slide.heading || '', {
+        x: 0.5, y: 0.28, w: 9, h: 0.72,
+        fontSize: 26, bold: true, color: ACCENT,
+        fontFace: 'Arial'
+      });
+      // Divider line
+      s.addShape(pptx.ShapeType.line, {
+        x: 0.5, y: 1.05, w: 9, h: 0,
+        line: { color: ACCENT, width: 1.5 }
+      });
+      // Bullets
+      if (slide.bullets && slide.bullets.length) {
+        const bulletText = slide.bullets.map(b => ({ text: b, options: { bullet: { type: 'bullet' }, paraSpaceAfter: 6 } }));
+        s.addText(bulletText, {
+          x: 0.5, y: 1.2, w: 8.8, h: 3.0,
+          fontSize: 20, color: DARK,
+          fontFace: 'Arial', valign: 'top'
+        });
+      }
+      // Speaker note
+      if (slide.speakerNote) {
+        s.addNotes(slide.speakerNote);
+      }
+    }
+
+    // Slide number (not on title)
+    if (idx > 0) {
+      s.addText(String(idx) + ' / ' + (plan.slides.length - 1), {
+        x: 8.8, y: 4.9, w: 1, h: 0.3,
+        fontSize: 10, color: 'aabbcc', align: 'right', fontFace: 'Arial'
+      });
+    }
+
+    // Footer watermark
+    s.addText('© Synge Street Games', {
+      x: 0.3, y: 4.9, w: 4, h: 0.3,
+      fontSize: 9, color: 'cccccc', fontFace: 'Arial'
+    });
+  });
+
+  // Download
+  const filename = (plan.student || state.name).replace(/[^a-zA-Z0-9]/g,'_') + '_CBA_Slides.pptx';
+  await pptx.writeFile({ fileName: filename });
+
+  // Show success in screen
+  const content = document.getElementById('script-content');
+  const note = plan.brotherNote || 'Now go show them what you can do.';
+  content.innerHTML =
+    '<div style="text-align:center;padding:40px 20px;">' +
+    '<div style="font-size:3rem;margin-bottom:16px;">🎞️</div>' +
+    '<h2 style="color:var(--brother);margin-bottom:8px;">Slides downloaded!</h2>' +
+    '<p style="color:#555;margin-bottom:6px;"><strong>' + filename + '</strong></p>' +
+    '<p style="color:#888;font-size:0.9rem;margin-bottom:24px;">' + note + '</p>' +
+    '<p style="color:#aaa;font-size:0.8rem;">Open in PowerPoint or Keynote. Add images. Make it yours.</p>' +
+    '<button class="print-btn" onclick="buildSlides()" style="margin-top:20px;">🔄 Rebuild Slides</button> ' +
+    '<button class="back-to-chat" onclick="showScreen(\'screen-chat\')">← Back to The Brother</button>' +
+    '</div>';
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function scrollToBottom() {
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.scrollTop = msgs.scrollHeight;
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function saveHistory() {
+  localStorage.setItem(`brother_history_${state.lang}`, JSON.stringify(state.history.slice(-40)));
+}
+
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ============================================================
+// ============================================================
+// TURBO GATE — must earn access through the game
+// ============================================================
+function getTurboStars() {
+  let total = 0;
+  ['es','fr','de'].forEach(lang => {
+    ['identity','family','likes','school','hobbies','opinions'].forEach(cat => {
+      for (let lv = 1; lv <= 10; lv++) {
+        const b = localStorage.getItem(`turbo_best_${lang}_${cat}_${lv}`);
+        if (b) total += parseInt(b);
+      }
+    });
+  });
+  return total;
+}
+
+function checkTurboGate() {
+  const stars = getTurboStars();
+  const THRESHOLD = 10;
+  if (stars >= THRESHOLD) return; // all good
+
+  // Not enough stars — show locked screen
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const locked = document.getElementById('screen-locked');
+  if (locked) { locked.classList.add('active'); return; }
+
+  // Build the locked screen dynamically
+  const div = document.createElement('div');
+  div.id = 'screen-locked';
+  div.style.cssText = 'display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;background:#1c1917;padding:30px;text-align:center;';
+  div.innerHTML = `
+    <svg viewBox="0 0 200 260" width="130" height="169" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="190" rx="58" ry="72" fill="#2d5a27"/>
+      <rect x="42" y="155" width="116" height="100" rx="20" fill="#2d5a27"/>
+      <rect x="84" y="155" width="32" height="90" rx="4" fill="#f0ead6"/>
+      <path d="M42 165 Q55 155 72 152 L84 155 L84 245 Q62 240 42 220Z" fill="#3d7a35"/>
+      <path d="M158 165 Q145 155 128 152 L116 155 L116 245 Q138 240 158 220Z" fill="#3d7a35"/>
+      <ellipse cx="28" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="172" cy="195" rx="20" ry="52" fill="#2d5a27"/>
+      <ellipse cx="28" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <ellipse cx="172" cy="238" rx="16" ry="14" fill="#d4956a"/>
+      <rect x="86" y="128" width="28" height="32" rx="8" fill="#d4956a"/>
+      <ellipse cx="100" cy="100" rx="54" ry="60" fill="#d4956a"/>
+      <ellipse cx="100" cy="52" rx="52" ry="28" fill="#e8e2d0"/>
+      <path d="M48 72 Q44 55 50 42 Q58 28 72 24 Q86 20 100 20 Q114 20 128 24 Q142 28 150 42 Q156 55 152 72" fill="#e8e2d0"/>
+      <path d="M48 85 Q42 95 44 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <path d="M152 85 Q158 95 156 108" fill="none" stroke="#e8e2d0" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="100" cy="80" rx="44" ry="22" fill="#d4956a"/>
+      <path d="M68 90 Q82 84 96 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <path d="M104 90 Q118 84 132 90" fill="none" stroke="#a09080" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="82" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="118" cy="102" rx="13" ry="10" fill="#f0ede6"/>
+      <ellipse cx="82" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="118" cy="103" rx="7" ry="8" fill="#5a3e28"/>
+      <ellipse cx="82" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="118" cy="103" rx="4" ry="4.5" fill="#1a1208"/>
+      <ellipse cx="84" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="120" cy="100" rx="2" ry="2" fill="white"/>
+      <ellipse cx="82" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="118" cy="103" rx="15" ry="12" fill="rgba(200,220,255,0.12)" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M97 103 Q100 100 103 103" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M67 99 Q60 96 54 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <path d="M133 99 Q140 96 146 98" fill="none" stroke="#7a6a5a" stroke-width="2"/>
+      <ellipse cx="100" cy="118" rx="9" ry="7" fill="#c08060"/>
+      <path d="M84 130 Q100 138 116 130" fill="none" stroke="#8a5a3a" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="46" cy="105" rx="9" ry="13" fill="#c08060"/>
+      <ellipse cx="154" cy="105" rx="9" ry="13" fill="#c08060"/>
+    </svg>
+    <h2 style="font-family:'Lora',serif;color:white;font-size:1.8rem;margin:20px 0 10px;">Not yet.</h2>
+    <p style="color:rgba(255,255,255,0.5);font-size:1rem;max-width:320px;line-height:1.7;margin-bottom:8px;">
+      You have <strong style="color:#ffd93d;">${stars} star${stars !== 1 ? 's' : ''}</strong> from Turbo.<br>
+      You need <strong style="color:white;">${THRESHOLD}</strong> to earn The Brother.
+    </p>
+    <p style="color:rgba(255,255,255,0.35);font-size:0.85rem;font-style:italic;margin-bottom:32px;">
+      "Go back and do the work first."
+    </p>
+    <a href="index.html" style="background:#2d5a27;color:white;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;padding:14px 32px;border-radius:12px;text-decoration:none;transition:all 0.2s;">
+      ← Back to Turbo
+    </a>
+  `;
+  document.body.appendChild(div);
+}
+
+// ============================================================
+// INIT — restore saved state
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  checkTurboGate();
+
+  const savedName = localStorage.getItem('brother_name');
+  const savedLang = localStorage.getItem('brother_lang');
+  const savedWeek = localStorage.getItem('brother_week');
+
+  if (savedName) document.getElementById('inp-name').value = savedName;
+
+  if (savedLang) {
+    document.querySelectorAll('.lang-choice').forEach(b => {
+      b.classList.toggle('selected', b.dataset.lang === savedLang);
+    });
+    state.lang = savedLang;
+  }
+
+  if (savedWeek) {
+    const week = parseInt(savedWeek);
+    document.querySelectorAll('.week-btn').forEach(b => {
+      b.classList.toggle('selected', parseInt(b.dataset.week) === week);
+    });
+    state.week = week;
+  }
+});
+</script>
+</body>
+</html>
